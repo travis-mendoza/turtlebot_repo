@@ -23,6 +23,7 @@ using robotis::turtlebot3::sensors::AnalogPins;
 AnalogPins::AnalogPins(
   std::shared_ptr<rclcpp::Node> & nh,
   const std::string & topic_name)
+: Sensors(nh, "")  // Call parent constructor with node handle and empty frame_id
 {
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10));
 
@@ -35,6 +36,8 @@ void AnalogPins::publish(
   const rclcpp::Time & now,
   std::shared_ptr<DynamixelSDKWrapper> & dxl_sdk_wrapper)
 {
+  (void)now;  // Mark as unused intentionally to suppress warning
+
   auto analog_msg = std::make_unique<std_msgs::msg::UInt16MultiArray>();
   
   // Set up dimensions for the message
