@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    device_name: '/dev/ttyACM0'
+    device_baudrate: 1000000  # From DynamixelSDKWrapper setup
+    device_protocol: 2.0  # DYNAMIXEL protocol version from OpenCR code
+    device_id: 200  # the ID of the DYNAMIXEL device from OpenCR code
+    publish_rate: 1.0  # Hz
