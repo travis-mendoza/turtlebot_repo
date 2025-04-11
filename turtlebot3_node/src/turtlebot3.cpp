@@ -197,7 +197,11 @@ void TurtleBot3::add_sensors()
       is_connected_ir,
       is_connected_sonar));
 
-  sensors_.push_back(new sensors::AnalogPins(node_handle_, "analog_pins"));
+  sensors_.push_back(
+    new sensors::AnalogPins(
+      node_handle_,
+      "analog_pins"));
+      
 
   RCLCPP_INFO(this->get_logger(), "Successfully added all sensors");
 

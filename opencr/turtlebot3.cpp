@@ -119,7 +119,7 @@ static void update_motor_status(uint32_t interval_ms);
 static void update_battery_status(uint32_t interval_ms);
 static void update_analog_sensors(uint32_t interval_ms);
 static void update_joint_status(uint32_t interval_ms);
-
+static void update_analog_pins(uint32_t interval_ms);
 
 DYNAMIXEL::USBSerialPortHandler port_dxl_slave(SERIAL_DXL_SLAVE);
 DYNAMIXEL::Slave dxl_slave(port_dxl_slave, MODEL_NUM_DXL_SLAVE);
@@ -244,7 +244,6 @@ enum ControlTableItemAddr{
   ADDR_GOAL_CURRENT_WR_GRIPPER  = 343,
   ADDR_GOAL_CURRENT_RD          = 344,
 
-  // TODO: Do these addresses make sense?
   ADDR_ANALOG_A0 = 350,
   ADDR_ANALOG_A1 = 352,
   ADDR_ANALOG_A2 = 354,
@@ -580,9 +579,12 @@ void TurtleBot3Core::begin(const char* model_name)
   sensors.initIMU();
   sensors.calibrationGyro();
 
-  //To indicate that the initialization is complete.
+  // To indicate that the initialization is complete.
   sensors.makeMelody(1); 
+  sensors.makeMelody(3);  // To indicate that we are running modified firmware
 
+  // Print a version message to Serial
+  DEBUG_PRINTLN("Running ANALOG-ENABLED firmware V20250410");
   DEBUG_PRINTLN("Begin End...");
 }
 

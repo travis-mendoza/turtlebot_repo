@@ -37,7 +37,6 @@ void AnalogPins::publish(
   std::shared_ptr<DynamixelSDKWrapper> & dxl_sdk_wrapper)
 {
   (void)now;  // Mark as unused intentionally to suppress warning
-  (void)dxl_sdk_wrapper;  // Also mark this as unused for now
   
   try {
     auto analog_msg = std::make_unique<std_msgs::msg::UInt16MultiArray>();
@@ -49,8 +48,17 @@ void AnalogPins::publish(
     analog_msg->layout.dim[0].stride = 6;
     analog_msg->layout.data_offset = 0;
     
-    // Just publish zeroes for now - we'll add real data reading later
-    analog_msg->data.resize(6, 0);
+    // Initialize data array to hold 6 pin values
+    analog_msg->data.resize(6);
+    
+    // Read analog values from control table (addresses 350-360)
+    // These addresses correspond to A0-A5 pins on the OpenCR board
+    analog_msg->data[0] = dxl_sdk_wrapper->get_data_from_device<uint16_t>(350, 2);  // A0
+    analog_msg->data[1] = dxl_sdk_wrapper->get_data_from_device<uint16_t>(352, 2);  // A1
+    analog_msg->data[2] = dxl_sdk_wrapper->get_data_from_device<uint16_t>(354, 2);  // A2
+    analog_msg->data[3] = dxl_sdk_wrapper->get_data_from_device<uint16_t>(356, 2);  // A3
+    analog_msg->data[4] = dxl_sdk_wrapper->get_data_from_device<uint16_t>(358, 2);  // A4
+    analog_msg->data[5] = dxl_sdk_wrapper->get_data_from_device<uint16_t>(360, 2);  // A5
     
     analog_publisher_->publish(std::move(analog_msg));
   } catch (const std::exception & e) {
@@ -63,4 +71,3 @@ void AnalogPins::publish(
       "Unknown exception in analog_pins publish");
   }
 }
-
