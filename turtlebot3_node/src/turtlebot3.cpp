@@ -67,8 +67,8 @@ void TurtleBot3::init_dynamixel_sdk_wrapper(const std::string & usb_port)
 
   dxl_sdk_wrapper_->init_read_memory(
     extern_control_table.millis.addr,
-    (extern_control_table.analog_a5.addr - extern_control_table.millis.addr) +
-    extern_control_table.analog_a5.length
+    (extern_control_table.profile_acceleration_right.addr - extern_control_table.millis.addr) +
+    extern_control_table.profile_acceleration_right.length
   );
 }
 
@@ -198,6 +198,8 @@ void TurtleBot3::add_sensors()
       is_connected_sonar));
 
   sensors_.push_back(new sensors::AnalogPins(node_handle_, "analog_pins"));
+
+  RCLCPP_INFO(this->get_logger(), "Successfully added all sensors");
 
   dxl_sdk_wrapper_->read_data_set();
   sensors_.push_back(
